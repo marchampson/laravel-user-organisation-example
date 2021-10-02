@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Organisation;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
@@ -48,12 +49,10 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        $organisation = $user->organisation()->make([
+        Organisation::create([
             'address1' => $request->address1,
-            'user_id' => auth()->id(),
+            'user_id' => $user->id
         ]);
-
-        $organisation->save();
 
         event(new Registered($user));
 
